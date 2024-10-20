@@ -1,0 +1,93 @@
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;    
+    /* width: 700px; */
+    /* border: 1px solid red; */
+    border-radius: 8px;
+  }
+  
+  .card-header {
+    background-color: #f5f5f5;
+    padding: 10px 20px;
+    border-radius: 8px 8px 0 0;
+    text-align: left;
+  }
+  
+  .card-info {
+    display: flex;
+    align-items: center;
+  }
+  
+  .card-info p {
+    margin-right: 10px;
+    color: gray;
+  }
+  
+  .icon-btn {
+    border: none;
+    background: none;
+    cursor: pointer;
+  }
+  
+  .card-body {
+    text-align: center;
+    padding: 20px;
+    border-top: none;
+  }
+  
+  .avatar-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .avatar-img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+  }
+  
+  .role {
+    color: gray;
+  }
+  
+  .alert-box {
+    margin-top: 20px;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  
+  .alert-box.info {
+    background-color: #e0f7fa;
+    border: 1px solid #26c6da;
+  }
+  
+  .alert-box.warning {
+    background-color: #fff3e0;
+    border: 1px solid #ffb74d;
+  }
+  
+  .btn-container {
+    margin-top: 20px;
+  }
+  
+  .service-btn {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  
+  .start-btn {
+    background-color: #2196f3;
+  }
+  
+  .end-btn {
+    background-color: #f44336;
+  }
+  
