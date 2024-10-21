@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/queue-it/static/css/main.64522201.css",
+    "main.js": "/queue-it/static/js/main.d592306c.js",
+    "static/media/img-noise-361x370.png": "/queue-it/static/media/img-noise-361x370.c62986e72333fe62bf4e.png",
+    "static/media/android-icon-192x192.png": "/queue-it/static/media/android-icon-192x192.e29a5499e5d910794dae.png",
+    "index.html": "/queue-it/index.html",
+    "main.64522201.css.map": "/queue-it/static/css/main.64522201.css.map",
+    "main.d592306c.js.map": "/queue-it/static/js/main.d592306c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.64522201.css",
+    "static/js/main.d592306c.js"
+  ]
+}
