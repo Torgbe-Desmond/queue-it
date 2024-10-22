@@ -1,6 +1,6 @@
 // src/Pages/RegisterPage/Register.js
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Avatar } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../features/authSlice';
@@ -65,7 +65,7 @@ const Register = () => {
             />
             {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-              {loading ? 'Registering...' : 'Register'}
+            {loading ? <CircularProgress size={24} /> : 'Register'} 
             </Button>
           </Box>
         </Box>

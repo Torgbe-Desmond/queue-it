@@ -1,6 +1,5 @@
-// src/Pages/LoginPage/Login.js
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Avatar } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material'; // Import CircularProgress
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../features/authSlice';
@@ -34,12 +33,11 @@ const Login = () => {
     <div className="login-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          
           <Avatar
-                alt="Customer Avatar"
-                src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
-                sx={{ width: 120, height: 120 }}
-              />
+            alt="Customer Avatar"
+            src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
+            sx={{ width: 120, height: 120 }}
+          />
 
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -62,9 +60,9 @@ const Login = () => {
               value={companyDetails.password}
               onChange={handleChange}
             />
-            {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+            {error && <p style={{ color: 'red' }}>{error}</p>} 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? <CircularProgress size={24} /> : 'Login'} 
             </Button>
           </Box>
         </Box>

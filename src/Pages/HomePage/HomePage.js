@@ -14,7 +14,7 @@ const HomePage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const { customerLoading, serverLoading, qrLoading } = useSelector((state) => state.home);
+  const { customerLoading, serverLoading, qrLoading,error } = useSelector((state) => state.home); // Select errors
 
   const handleAccordionChange = (accordion) => (event, isExpanded) => {
     setExpandedAccordion(isExpanded ? accordion : false);
@@ -74,6 +74,7 @@ const HomePage = () => {
                 variant="outlined" 
                 sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
               />
+              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show customer error */}
               <Button
                 variant="contained"
                 onClick={handlePostCustomer}
@@ -103,6 +104,7 @@ const HomePage = () => {
                 variant="outlined" 
                 sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
               />
+              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show server error */}
               <Button
                 variant="contained"
                 onClick={handlePostServer}
@@ -132,6 +134,7 @@ const HomePage = () => {
                 variant="outlined" 
                 sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
               />
+              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show QR error */}
               <Button
                 variant="contained"
                 onClick={handlePostQrCode}

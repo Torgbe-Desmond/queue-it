@@ -108,7 +108,7 @@ const SettingsPage = () => {
 
   return (
     <div className="app-container">
-      <Box sx={{ padding: 4, width: '90%', margin: '0 auto' }}>
+      <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
         <Typography variant="h4" gutterBottom>
           Company Settings
         </Typography>
