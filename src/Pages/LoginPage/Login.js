@@ -4,7 +4,6 @@ import { TextField, Button, Container, Box, Avatar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../features/authSlice';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Import the icon you want to display
 
 const Login = () => {
   const [companyDetails, setCompanyDetails] = useState({

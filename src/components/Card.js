@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
-import { Card, Avatar, Typography, Box, Button, Alert, LinearProgress, Grid } from '@mui/material';
+import { Card, Typography, Box, Button, Alert, LinearProgress, Grid } from '@mui/material';
 import { io } from 'socket.io-client';
 import { useParams } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import {
   startLoading,
-  stopLoading,
   connectServer,
   disconnectServer,
   receiveCustomer,
@@ -33,7 +32,7 @@ const CardItem = () => {
 
   useEffect(() => {
     dispatch(getServerDetails({ serverId }));
-  }, [serverId]);
+  }, [serverId,dispatch]);
 
   const handleConnect = () => {
     dispatch(startLoading());

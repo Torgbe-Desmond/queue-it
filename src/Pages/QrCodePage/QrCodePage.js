@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { QRCodeSVG } from 'qrcode.react';
-import { Box, Typography, Alert, CircularProgress, Grid } from '@mui/material';
+import { Box, Alert, Grid } from '@mui/material';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearError, getServerDetails } from '../../features/QRSlice'; // Adjust the path as needed

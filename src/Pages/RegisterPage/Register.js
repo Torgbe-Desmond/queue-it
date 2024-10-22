@@ -1,10 +1,9 @@
 // src/Pages/RegisterPage/Register.js
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Container, Box, Avatar } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../features/authSlice';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined'; // Import the icon you want to display
 
 
 const Register = () => {
