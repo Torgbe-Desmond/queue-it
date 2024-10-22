@@ -102,7 +102,7 @@ const settingsSlice = createSlice({
 
       // Delete Server
       .addCase(deleteServer.fulfilled, (state, action) => {
-        state.servers = state.servers.filter((server) => server._id !== action.meta.arg);
+        state.servers = state.servers.filter((server) => server._id !== action.payload);
       })
 
       // Fetch Company Info

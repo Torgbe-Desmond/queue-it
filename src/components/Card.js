@@ -130,7 +130,7 @@ const CardItem = () => {
                 Disconnect
               </Button>
             ) : (
-              <Button sx={{margin:2}} variant="outlined" color="primary" onClick={handleConnect}>
+              <Button sx={{width:'50%'}} variant="outlined" color="primary" onClick={handleConnect}>
                 Connect
               </Button>
             )}

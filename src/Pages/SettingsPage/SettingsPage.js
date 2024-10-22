@@ -102,21 +102,25 @@ const SettingsPage = () => {
   };
 
   const handleSave = async () => {
-    await dispatch(updateCompanyInfo(editedCompanyInfo)); // Update company info
+    const payload = {
+      ...editedCompanyInfo,
+      _id: editedCompanyInfo._id, // Ensure _id is explicitly included
+    };
+    await dispatch(updateCompanyInfo(payload));
     setIsEditing(false);
   };
+  
 
   return (
     <div className="app-container">
       <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
-        <Typography variant="h4" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           Company Settings
         </Typography>
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
             <Card sx={{ padding: 3 }}>
-              <Typography variant="h6">Manage Servers</Typography>
 
               <Button
                 variant="contained"
@@ -160,7 +164,7 @@ const SettingsPage = () => {
 
           {/* Company Information */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 3 }}>
+            <Card sx={{ padding: 3, width:'100%' }}>
               {isEditing ? (
                 <>
                   <TextField
@@ -199,7 +203,7 @@ const SettingsPage = () => {
                   <Button
                     variant="contained"
                     onClick={handleSave}
-                    sx={{ margin:2 }}
+                    sx={{ mb:2 }}
                   >
                     Save
                   </Button>
