@@ -1,25 +1,24 @@
 .home-container {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    flex-direction: column;
-    height: 100vh;
-    width: 100%;
-    margin: 0 auto;
-    padding: 20px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+@media (max-width: 600px) {
+  .home-container {
+    padding: 8px;
   }
-  
-  .MuiAccordion-root {
-    margin-bottom: 20px;
+
+  .MuiAccordionDetails-root {
+    padding: 12px;
   }
-  
+
   .MuiButton-root {
-    margin-top: 10px;
+    width: 100%; /* Take full width on mobile */
   }
-  
+
   .MuiTextField-root {
-    margin-bottom: 10px;
-    background-color: #FFF;
-    border-radius: 4px;
+    width: 100%;
   }
-  
+}

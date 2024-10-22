@@ -87,6 +87,7 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchServers.fulfilled, (state, action) => {
         state.status = 'succeeded';
+        console.log(action.payload)
         state.servers = action.payload;
       })
       .addCase(fetchServers.rejected, (state, action) => {
@@ -112,6 +113,7 @@ const settingsSlice = createSlice({
       // Update Company Info
       .addCase(updateCompanyInfo.fulfilled, (state, action) => {
         state.companyInfo = action.payload;
+        console.log(action.payload)
       });
   },
 });
