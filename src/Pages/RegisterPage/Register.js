@@ -1,10 +1,9 @@
-// src/Pages/RegisterPage/Register.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../features/authSlice';
-
+import avatarImage from '../../assests/android-icon-192x192.png'; // Using ES6 import
 
 const Register = () => {
   const [companyDetails, setCompanyDetails] = useState({
@@ -13,7 +12,7 @@ const Register = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth); // Access loading and error state
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     setCompanyDetails({
@@ -27,21 +26,21 @@ const Register = () => {
     dispatch(register(companyDetails));
   };
 
-  if (isAuthenticated) {
-    navigate(`/settings/${user?.id}`);
-  }
+  // Redirect after successful registration
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      navigate(`/settings/${user.id}`);
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div className="register-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-       {/* Add an Avatar with an icon here */}
-          <Avatar
-                alt="Customer Avatar"
-                src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
-                sx={{ width: 120, height: 120 }}
-              />
+          {/* Avatar */}
+          <Avatar alt="Customer Avatar" src={avatarImage} sx={{ width: 120, height: 120 }} />
 
+          {/* Registration Form */}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -63,9 +62,11 @@ const Register = () => {
               value={companyDetails.password}
               onChange={handleChange}
             />
-            {error && <p style={{ color: 'red' }}>{error}</p>} {/* Display error message */}
+            {/* Display error message */}
+            {error && <p style={{ color: 'red' }}>{error}</p>} 
+            {/* Register Button */}
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
-            {loading ? <CircularProgress size={24} /> : 'Register'} 
+              {loading ? <CircularProgress size={24} /> : 'Register'} 
             </Button>
           </Box>
         </Box>

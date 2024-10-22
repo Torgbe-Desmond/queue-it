@@ -59,6 +59,19 @@ const authSlice = createSlice({
         .addCase(login.rejected, (state, action) => {
           state.loading = false;
           state.error = action.payload;  // Save the error message
+        })
+        .addCase(register.pending, (state) => {
+          state.loading = true;
+          state.error = null;
+        })
+        .addCase(register.fulfilled, (state, action) => {
+          state.isAuthenticated = true;
+          state.loading = false;
+          state.user = action.payload;  // Save the logged-in user data
+        })
+        .addCase(register.rejected, (state, action) => {
+          state.loading = false;
+          state.error = action.payload;  // Save the error message
         });
     },
   });
