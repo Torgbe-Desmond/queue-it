@@ -126,11 +126,11 @@ const CardItem = () => {
 
           <Box sx={{ marginTop: 3, textAlign: 'center' }}>
             {isOnline ? (
-              <Button variant="outlined" color="secondary" onClick={handleDisconnect}>
+              <Button sx={{margin:2}} variant="outlined" color="secondary" onClick={handleDisconnect}>
                 Disconnect
               </Button>
             ) : (
-              <Button variant="outlined" color="primary" onClick={handleConnect}>
+              <Button sx={{margin:2}} variant="outlined" color="primary" onClick={handleConnect}>
                 Connect
               </Button>
             )}
