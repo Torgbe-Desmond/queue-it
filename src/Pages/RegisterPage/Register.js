@@ -44,12 +44,13 @@ const Register = () => {
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
           {/* Go Back Icon */}
-          <IconButton onClick={handleGoBack} sx={{ alignSelf: 'flex-start' }}>
-            <ArrowBackIcon />
-          </IconButton>
-
-          {/* Avatar */}
-          <Avatar alt="Customer Avatar" src={avatarImage} sx={{ width: 120, height: 120 }} />
+          <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
+            <Avatar
+              alt="Customer Avatar"
+              src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
+              sx={{ width: 120, height: 120 }}
+            />
+          </Box>
 
           {/* Registration Form */}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
@@ -80,6 +81,12 @@ const Register = () => {
               {loading ? <CircularProgress size={24} /> : 'Register'} 
             </Button>
           </Box>
+          <p
+            onClick={() => navigate(-1)} 
+            style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
+          >
+            Go Back
+          </p>
         </Box>
       </Container>
     </div>
