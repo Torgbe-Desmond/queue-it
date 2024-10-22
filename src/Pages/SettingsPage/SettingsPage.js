@@ -199,7 +199,7 @@ const SettingsPage = () => {
                   <Button
                     variant="contained"
                     onClick={handleSave}
-                    sx={{ mr: 2 , margin:2 }}
+                    sx={{ margin:2 }}
                   >
                     Save
                   </Button>
