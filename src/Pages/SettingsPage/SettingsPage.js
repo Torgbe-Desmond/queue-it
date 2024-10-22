@@ -73,7 +73,7 @@ const SettingsPage = () => {
   };
 
   const removeServer = async (serverId) => {
-    await dispatch(deleteServer(serverId)); // Dispatch action to delete server
+     dispatch(deleteServer(serverId)); // Dispatch action to delete server
   };
 
   const handleEditToggle = () => {
