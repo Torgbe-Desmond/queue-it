@@ -5,6 +5,12 @@
   align-items: center;
 }
 
+.btn-container{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
 @media (max-width: 600px) {
   .home-container {
     padding: 8px;

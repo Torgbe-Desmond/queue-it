@@ -161,8 +161,6 @@ const SettingsPage = () => {
           {/* Company Information */}
           <Grid item xs={12} md={6}>
             <Card sx={{ padding: 3 }}>
-              <Typography variant="h6">Company Information</Typography>
-
               {isEditing ? (
                 <>
                   <TextField
@@ -201,7 +199,7 @@ const SettingsPage = () => {
                   <Button
                     variant="contained"
                     onClick={handleSave}
-                    sx={{ mr: 2 }}
+                    sx={{ mr: 2 , margin:2 }}
                   >
                     Save
                   </Button>

@@ -72,14 +72,14 @@ const HomePage = () => {
                 onChange={(e) => setCustomerCode(e.target.value)} 
                 label="Customer Secret Code" 
                 variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
               />
               {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show customer error */}
               <Button
                 variant="contained"
                 onClick={handlePostCustomer}
                 disabled={customerLoading}
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' } }}
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' } }}
               >
                 {customerLoading ? <CircularProgress size={24} /> : 'Go to Customer List'}
               </Button>
@@ -102,14 +102,14 @@ const HomePage = () => {
                 onChange={(e) => setServerCode(e.target.value)} 
                 label="Server Secret Code" 
                 variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
               />
               {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show server error */}
               <Button
                 variant="contained"
                 onClick={handlePostServer}
                 disabled={serverLoading}
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' } }}
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' } }}
               >
                 {serverLoading ? <CircularProgress size={24} /> : 'Log onto Server'}
               </Button>
@@ -132,14 +132,14 @@ const HomePage = () => {
                 onChange={(e) => setQrCode(e.target.value)} 
                 label="QR Code" 
                 variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, margin: 2 }} 
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
               />
               {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show QR error */}
               <Button
                 variant="contained"
                 onClick={handlePostQrCode}
                 disabled={qrLoading}
-                sx={{ width: { xs: '100%', sm: '80%', md: '60%' } }}
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' } }}
               >
                 {qrLoading ? <CircularProgress size={24} /> : 'Scan QR Code'}
               </Button>
@@ -148,20 +148,22 @@ const HomePage = () => {
         </Accordion>
 
         {/* Register and Login Buttons */}
+        <div className='btn-container'>
         <Button
           variant="contained"
           onClick={() => navigate('/register')}
-          sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, marginTop: 2 }}
+          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
         >
           Register A Company
         </Button>
         <Button
           variant="contained"
           onClick={() => navigate('/login')}
-          sx={{ width: { xs: '100%', sm: '80%', md: '60%' }, marginTop: 2 }}
+          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
         >
           Login Account
         </Button>
+        </div>
       </Box>
     </div>
   );
