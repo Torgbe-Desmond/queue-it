@@ -1,3 +1,4 @@
+import React, { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -10,11 +11,16 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Drawer,
+  AppBar,
+  Toolbar,
+  Menu,
+  MenuItem
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import MenuIcon from '@mui/icons-material/Menu';
 import { v4 as uuidv4 } from 'uuid';
-import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { CircleNotifications } from '@mui/icons-material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -28,8 +34,9 @@ import {
 
 const SettingsPage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { companyId } = useParams();
-  const { servers, companyInfo } = useSelector((state) => state.main);
+  const { servers, companyInfo, isAuthenticated } = useSelector((state) => state.main);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCompanyInfo, setEditedCompanyInfo] = useState({
     _id: '',
@@ -39,6 +46,7 @@ const SettingsPage = () => {
   });
   const [socket, setSocket] = useState(null);
   const [matchedServers, setMatchedServers] = useState([]);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   useEffect(() => {
     const newSocket = io('https://queue-model-server.onrender.com', {
@@ -73,7 +81,7 @@ const SettingsPage = () => {
   };
 
   const removeServer = async (serverId) => {
-     dispatch(deleteServer(serverId)); // Dispatch action to delete server
+    dispatch(deleteServer(serverId)); // Dispatch action to delete server
   };
 
   const handleEditToggle = () => {
@@ -109,19 +117,72 @@ const SettingsPage = () => {
     await dispatch(updateCompanyInfo(payload));
     setIsEditing(false);
   };
-  
+
+  // Handle logout
+  const handleLogout = () => {
+    navigate('/login'); // Redirect to the login page
+  };
+
+  // Drawer Toggle
+  const toggleDrawer = (open) => (event) => {
+    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+      return;
+    }
+    setDrawerOpen(open);
+  };
+
+  const drawer = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        <ListItem button onClick={() => navigate('/dashboard')}>
+          <ListItemText primary="Dashboard" />
+        </ListItem>
+        <ListItem button onClick={() => navigate('/settings')}>
+          <ListItemText primary="Settings" />
+        </ListItem>
+        <ListItem button onClick={handleLogout}>
+          <ListItemText primary="Logout" />
+        </ListItem>
+      </List>
+    </Box>
+  );
 
   return (
     <div className="app-container">
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+            Company Settings
+          </Typography>
+          <Button color="inherit" onClick={handleLogout}>
+            Logout
+          </Button>
+        </Toolbar>
+      </AppBar>
+
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        {drawer}
+      </Drawer>
+
       <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
-        <Typography variant="h5" gutterBottom>
-          Company Settings
-        </Typography>
+        {/* Company Info, Servers, and Other Content */}
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
             <Card sx={{ padding: 3 }}>
-
               <Button
                 variant="contained"
                 onClick={generateServer}
@@ -153,9 +214,7 @@ const SettingsPage = () => {
                         }}
                       />
                     </ListItemIcon>
-                    <ListItemText
-                      primary={`Server Id: ${server.serverNumber}`}
-                    />
+                    <ListItemText primary={`Server Id: ${server.serverNumber}`} />
                   </ListItem>
                 ))}
               </List>
@@ -164,7 +223,7 @@ const SettingsPage = () => {
 
           {/* Company Information */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 3, width:'100%' }}>
+            <Card sx={{ padding: 3, width: '100%' }}>
               {isEditing ? (
                 <>
                   <TextField
@@ -200,11 +259,7 @@ const SettingsPage = () => {
                     fullWidth
                     sx={{ mb: 2 }}
                   />
-                  <Button
-                    variant="contained"
-                    onClick={handleSave}
-                    sx={{ mb:2 }}
-                  >
+                  <Button variant="contained" onClick={handleSave} sx={{ mb: 2 }}>
                     Save
                   </Button>
                   <Button variant="outlined" onClick={handleEditToggle}>
@@ -234,28 +289,6 @@ const SettingsPage = () => {
             </Card>
           </Grid>
         </Grid>
-
-        {/* Company Metrics */}
-        {/* <Box sx={{ mt: 4 }}>
-          <Typography variant="h6">Company Metrics</Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ padding: 2 }}>
-                <Typography variant="body1">Companies Served: {companyDetails.companiesServed}</Typography>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ padding: 2 }}>
-                <Typography variant="body1">Service Rate: {companyDetails.serviceRate}</Typography>
-              </Card>
-            </Grid>
-            <Grid item xs={12} sm={4}>
-              <Card sx={{ padding: 2 }}>
-                <Typography variant="body1">Arrival Rate: {companyDetails.arrivalRate}</Typography>
-              </Card>
-            </Grid>
-          </Grid>
-        </Box> */}
       </Box>
     </div>
   );

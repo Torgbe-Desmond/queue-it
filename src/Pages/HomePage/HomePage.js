@@ -57,35 +57,6 @@ const HomePage = () => {
           Choose any of the steps to start
         </Typography>
 
-        {/* Customer Accordion */}
- {/* /*       <Accordion expanded={expandedAccordion === 'customerAccordion'} onChange={handleAccordionChange('customerAccordion')} sx={{ backgroundColor: '#FFF', mb: 2 }}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />} sx={{ backgroundColor: '#FFFFFF', color: '#333' }}>
-            <Typography sx={{ color: '#333' }}>View customers by number</Typography>
-          </AccordionSummary>
-          <AccordionDetails sx={{ textAlign: 'left', backgroundColor: '#E1F5FE', padding: '16px' }}>
-            <Typography sx={{ color: '#333' }}>
-              Here there will be a display of customers who are currently connected to the specific company line for service.
-            </Typography>
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-              <TextField 
-                value={customerCode} 
-                onChange={(e) => setCustomerCode(e.target.value)} 
-                label="Customer Secret Code" 
-                variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
-              />
-              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show customer error */}
-              {/* <Button
-                variant="contained"
-                onClick={handlePostCustomer}
-                disabled={customerLoading}
-                sx={{ width: { xs: '100%', sm: '80%', md: '30%' } }}
-              >
-                {customerLoading ? <CircularProgress size={24} /> : 'Go to Customer List'}
-              </Button>
-            </Box>
-          </AccordionDetails>
-        </Accordion> */}
 
         {/* Server Accordion */}
         <Accordion expanded={expandedAccordion === 'serverAccordion'} onChange={handleAccordionChange('serverAccordion')} sx={{ mb: 2 }}>

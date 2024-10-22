@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material'; // Import CircularProgress
+import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { login } from '../../features/authSlice';
@@ -11,7 +11,7 @@ const Login = () => {
   });
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth); // Access loading and error state
+  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth); 
 
   const handleChange = (e) => {
     setCompanyDetails({
@@ -33,11 +33,15 @@ const Login = () => {
     <div className="login-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          <Avatar
-            alt="Customer Avatar"
-            src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
-            sx={{ width: 120, height: 120 }}
-          />
+
+          {/* Clickable Avatar that navigates to homepage */}
+          <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
+            <Avatar
+              alt="Customer Avatar"
+              src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
+              sx={{ width: 120, height: 120 }}
+            />
+          </Box>
 
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -65,6 +69,14 @@ const Login = () => {
               {loading ? <CircularProgress size={24} /> : 'Login'} 
             </Button>
           </Box>
+
+          {/* Go Back Text */}
+          <p
+            onClick={() => navigate(-1)} 
+            style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
+          >
+            Go Back
+          </p>
         </Box>
       </Container>
     </div>

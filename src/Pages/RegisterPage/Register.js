@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Box, Avatar, CircularProgress } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress,IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { register } from '../../features/authSlice';
 import avatarImage from '../../assests/android-icon-192x192.png'; // Using ES6 import
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'; // Import the back icon
 
 const Register = () => {
   const [companyDetails, setCompanyDetails] = useState({
@@ -33,10 +34,20 @@ const Register = () => {
     }
   }, [isAuthenticated, user, navigate]);
 
+  // Go back to the homepage
+  const handleGoBack = () => {
+    navigate('/');
+  };
+
   return (
     <div className="register-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+          {/* Go Back Icon */}
+          <IconButton onClick={handleGoBack} sx={{ alignSelf: 'flex-start' }}>
+            <ArrowBackIcon />
+          </IconButton>
+
           {/* Avatar */}
           <Avatar alt="Customer Avatar" src={avatarImage} sx={{ width: 120, height: 120 }} />
 
