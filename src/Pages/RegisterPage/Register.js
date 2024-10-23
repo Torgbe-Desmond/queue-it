@@ -82,7 +82,7 @@ const Register = () => {
             </Button>
           </Box>
           <p
-            onClick={() => navigate(-1)} 
+            onClick={() => navigate('/')} 
             style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
           >
             Go Back
