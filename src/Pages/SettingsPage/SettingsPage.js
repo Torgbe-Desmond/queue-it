@@ -15,6 +15,8 @@ import {
   AppBar,
   Toolbar,
   Alert,
+  Snackbar,
+  LinearProgress ,
   CircularProgress,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -50,6 +52,7 @@ const SettingsPage = () => {
   const [matchedServers, setMatchedServers] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // New loading state
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   useEffect(() => {
     if (deleteServerStatus === 'succeeded') {
@@ -84,6 +87,16 @@ const SettingsPage = () => {
       newSocket.disconnect();
     };
   }, [companyId, servers]);
+
+  const handleCopyToClipboard = (serverId) => {
+    navigator.clipboard.writeText(serverId).then(() => {
+      setSnackbarOpen(true); // Show snackbar after successful copy
+    });
+  };
+
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
 
   const generateServer = async () => {
     setIsLoading(true); // Start loading
@@ -175,6 +188,7 @@ const SettingsPage = () => {
 
   return (
     <div className="app-container">
+      
       <AppBar position="static" sx={{ width: '100%' }}>
         <Toolbar>
           <IconButton
@@ -196,58 +210,68 @@ const SettingsPage = () => {
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
-            <Card sx={{ padding: 3 }}>
-              <Button
-                variant="contained"
-                onClick={generateServer}
-                fullWidth
-                sx={{ mb: 2 }}
-                disabled={isLoading} 
+          <Card sx={{ padding: 3 }}>
+      <Button
+        variant="contained"
+        onClick={generateServer}
+        fullWidth
+        sx={{ mb: 2 }}
+        disabled={isLoading}
+      >
+        Add Server
+      </Button>
+      <List>
+        {servers.map((server) => (
+          <ListItem
+            key={server._id} // Use server ID as the key
+            secondaryAction={
+              <IconButton
+                edge="end"
+                aria-label="delete"
+                onClick={() => removeServer(server._id)} // Pass server ID
               >
-                Add Server
-              </Button>
-              <List>
-                {servers.map((server) => (
-                  <ListItem
-                    key={server._id} // Use server ID as the key
-                    secondaryAction={
-                      <IconButton
-                        edge="end"
-                        aria-label="delete"
-                        onClick={() => removeServer(server._id)} // Pass server ID
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    }
-                  >
-                    <ListItemIcon>
-                      <CircleNotifications
-                        sx={{
-                          color: matchedServers.includes(server._id) ? 'green' : 'red',
-                          fontSize: '16px',
-                        }}
-                      />
-                    </ListItemIcon>
-                    <ListItemText primary={`Server Id: ${server.serverNumber}`} />
-                  </ListItem>
-                ))}
-              </List>
-              
-              {isLoading && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                  <CircularProgress />
-                </Box>
-              )}
+                <DeleteIcon />
+              </IconButton>
+            }
+            onClick={() => handleCopyToClipboard(server.serverNumber)} // Copy on click
+            sx={{ cursor: 'pointer' }} // Change cursor to indicate clickable item
+          >
+            <ListItemIcon>
+              <CircleNotifications
+                sx={{
+                  color: matchedServers.includes(server._id) ? 'green' : 'red',
+                  fontSize: '16px',
+                }}
+              />
+            </ListItemIcon>
+            <ListItemText primary={`Server Id: ${server.serverNumber}`} />
+          </ListItem>
+        ))}
+      </List>
 
+      {isLoading && (
+        <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+          <CircularProgress />
+        </Box>
+      )}
 
-              
+      {timer && (
+        <Box mt={4}>
+          <Alert severity="success">Deletion was successful</Alert>
+        </Box>
+      )}
 
-              {timer && (
-                <Box mt={4}>
-                  <Alert severity="success">Deletion was successful</Alert>
-                </Box>
-              )}
-            </Card>
+      {/* Snackbar for Copy Notification */}
+      <Snackbar
+        open={snackbarOpen}
+        autoHideDuration={3000}
+        onClose={handleSnackbarClose}
+      >
+        <Alert onClose={handleSnackbarClose} severity="success">
+          Server ID copied to clipboard!
+        </Alert>
+      </Snackbar>
+    </Card>
           </Grid>
 
           {/* Company Information */}
