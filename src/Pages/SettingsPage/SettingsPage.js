@@ -15,7 +15,9 @@ import {
   AppBar,
   Toolbar,
   Menu,
-  MenuItem
+  MenuItem,
+  Alert,
+  CircularProgress
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -36,7 +38,8 @@ const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { companyId } = useParams();
-  const { servers, companyInfo, isAuthenticated } = useSelector((state) => state.main);
+  const { servers, companyInfo, isAuthenticated , deleteServerStatus} = useSelector((state) => state.main);
+  const [timer,setTimer] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCompanyInfo, setEditedCompanyInfo] = useState({
     _id: '',
@@ -47,6 +50,15 @@ const SettingsPage = () => {
   const [socket, setSocket] = useState(null);
   const [matchedServers, setMatchedServers] = useState([]);
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false); // New loading state
+
+
+  if(deleteServerStatus == 'succeeded'){
+      setTimer(true)
+      setTimeout(()=>{
+        setTimer(false)
+      },3000)
+  }
 
   useEffect(() => {
     const newSocket = io('https://queue-model-server.onrender.com', {
@@ -73,11 +85,18 @@ const SettingsPage = () => {
   }, [companyId, servers]);
 
   const generateServer = async () => {
-    const newServer = {
-      companyId,
-      serverId: uuidv4().slice(0, 8),
-    };
-    await dispatch(addServer(newServer)); // Dispatch action to add server
+    setIsLoading(true); // Start loading
+    try {
+      const newServer = {
+        companyId,
+        serverId: uuidv4().slice(0, 8),
+      };
+      await dispatch(addServer(newServer)); // Dispatch action to add server
+    } catch (error) {
+      console.error('Error adding server:', error);
+    } finally {
+      setIsLoading(false); // End loading after success or failure
+    }
   };
 
   const removeServer = async (serverId) => {
@@ -177,10 +196,15 @@ const SettingsPage = () => {
                 onClick={generateServer}
                 fullWidth
                 sx={{ mb: 2 }}
+                disabled={isLoading} 
               >
                 Add Server
               </Button>
-
+              {isLoading && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                  <CircularProgress />
+                </Box>
+              )}
               <List>
                 {servers.map((server) => (
                   <ListItem
@@ -207,7 +231,13 @@ const SettingsPage = () => {
                   </ListItem>
                 ))}
               </List>
-            </Card>
+
+              {deleteServerStatus === 'succeeded' && (
+                <Box mt={4}>
+                  <Alert severity="success">Deletion was successful</Alert>
+                </Box>
+              )}
+              </Card>
           </Grid>
 
           {/* Company Information */}

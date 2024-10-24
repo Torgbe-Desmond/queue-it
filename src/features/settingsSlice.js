@@ -76,6 +76,7 @@ const settingsSlice = createSlice({
     servers: [],
     companyInfo: {},
     status: 'idle',
+    deleteServerStatus:'idle',
     error: null,
   },
   reducers: {},
@@ -100,9 +101,16 @@ const settingsSlice = createSlice({
       })
 
       // Delete Server
+      .addCase(deleteServer.pending, (state, action) => {
+        state.deleteServerStatus = 'loading'
+      })
       .addCase(deleteServer.fulfilled, (state, action) => {
-        const {serverId} = action.payload
+        const {serverId} = action.payload;
         state.servers = state.servers.filter((server) => server._id !== serverId);
+        state.deleteServerStatus = 'succeeded';
+      })
+      .addCase(deleteServer.rejected, (state, action) => {
+        state.deleteServerStatus = 'failed';
       })
 
       // Fetch Company Info
