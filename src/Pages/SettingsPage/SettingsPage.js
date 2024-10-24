@@ -239,6 +239,9 @@ const SettingsPage = () => {
                 </Box>
               )}
 
+
+              
+
               {timer && (
                 <Box mt={4}>
                   <Alert severity="success">Deletion was successful</Alert>
