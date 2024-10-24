@@ -1,48 +1,37 @@
-import React, { useState } from 'react';
-import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import HistoryIcon from '@mui/icons-material/History';
-import { BrowserRouter as Router, Routes, Route, useNavigate } from 'react-router-dom';
-import Profile from '../../components/Profile';
-import Scan from '../../components/Scan';
-import History from '../../components/History';
+import React from 'react';
+import { Grid, Card, CardMedia, CardContent, Button, Typography } from '@mui/material';
 
-const UserPage = () => {
-  const [value, setValue] = useState(0);
-  const navigate = useNavigate();
+const users = [
+  { id: 1, name: 'John Doe', image: 'https://via.placeholder.com/150' },
+  { id: 2, name: 'Jane Smith', image: 'https://via.placeholder.com/150' },
+  // Add more users as needed
+];
 
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-    if (newValue === 0) {
-      navigate('/profile');
-    } else if (newValue === 1) {
-      navigate('/scan');
-    } else if (newValue === 2) {
-      navigate('/history');
-    }
-  };
-
+const UsersPage = () => {
   return (
-    <Box sx={{ width: '100%' }}>
-      <Routes>
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/scan" element={<Scan />} />
-        <Route path="/history" element={<History />} />
-      </Routes>
-
-      <BottomNavigation
-        value={value}
-        onChange={handleTabChange}
-        showLabels
-        sx={{ position: 'fixed', bottom: 0, width: '100%' }}
-      >
-        <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} />
-        <BottomNavigationAction label="Scan" icon={<CameraAltIcon />} />
-        <BottomNavigationAction label="History" icon={<HistoryIcon />} />
-      </BottomNavigation>
-    </Box>
+    <Grid container spacing={2}>
+      {users.map((user) => (
+        <Grid item xs={12} sm={6} md={4} key={user.id}>
+          <Card>
+            <CardMedia
+              component="img"
+              height="140"
+              image={user.image}
+              alt={user.name}
+            />
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="div">
+                {user.name}
+              </Typography>
+              <Button variant="contained" fullWidth>
+                {user.name}
+              </Button>
+            </CardContent>
+          </Card>
+        </Grid>
+      ))}
+    </Grid>
   );
 };
 
-export default UserPage;
+export default UsersPage;

@@ -1,41 +1,86 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { BottomNavigation, BottomNavigationAction, Box } from '@mui/material';
-import AccountCircleIcon from '@mui/icons-material/AccountCircle';
-import CameraAltIcon from '@mui/icons-material/CameraAlt';
-import HistoryIcon from '@mui/icons-material/History';
+import {
+  AppBar,
+  Toolbar,
+  Drawer,
+  List,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  IconButton,
+  Box,
+  Typography,
+} from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupIcon from '@mui/icons-material/Group';
 
 const UserLayout = () => {
-  const [value, setValue] = useState(0);
   const navigate = useNavigate();
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
-  const handleTabChange = (event, newValue) => {
-    setValue(newValue);
-    if (newValue === 0) {
-      navigate('/profile');
-    } else if (newValue === 1) {
-      navigate('/scan');
-    } else if (newValue === 2) {
-      navigate('/history');
-    }
+  const toggleDrawer = (open) => () => {
+    setDrawerOpen(open);
   };
 
-  return (
-    <Box sx={{ width: '100%' }}>
-      {/* The pages content (Profile, Scan, History) will be rendered here */}
-      <Outlet />
+  const handleNavigation = (path) => {
+    navigate(path);
+    setDrawerOpen(false); // Close the drawer after navigation
+  };
 
-      {/* Bottom Navigation Tabs */}
-      <BottomNavigation
-        value={value}
-        onChange={handleTabChange}
-        showLabels
-        sx={{ position: 'fixed', bottom: 0, width: '100vw', left: 0 }}
-      >
-        <BottomNavigationAction label="Profile" icon={<AccountCircleIcon />} />
-        <BottomNavigationAction label="Scan" icon={<CameraAltIcon />} />
-        <BottomNavigationAction label="History" icon={<HistoryIcon />} />
-      </BottomNavigation>
+  const drawer = (
+    <Box
+      sx={{ width: 250 }}
+      role="presentation"
+      onClick={toggleDrawer(false)}
+      onKeyDown={toggleDrawer(false)}
+    >
+      <List>
+        <ListItem button onClick={() => handleNavigation('/settings')}>
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary="Settings" />
+        </ListItem>
+        <ListItem button onClick={() => handleNavigation('/users')}>
+          <ListItemIcon>
+            <GroupIcon />
+          </ListItemIcon>
+          <ListItemText primary="Users Being Served" />
+        </ListItem>
+      </List>
+    </Box>
+  );
+
+  return (
+    <Box sx={{ display: 'flex', width: '100%' }}>
+      {/* AppBar at the top with a Menu icon for opening the Drawer */}
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap component="div">
+            User Management
+          </Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Drawer for navigation */}
+      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
+        {drawer}
+      </Drawer>
+
+      {/* Content that will change based on route */}
+      <Box sx={{ flexGrow: 1, p: 3 }}>
+        <Outlet />
+      </Box>
     </Box>
   );
 };

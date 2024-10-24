@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react'; 
 import {
   Box,
   Button,
@@ -14,10 +14,8 @@ import {
   Drawer,
   AppBar,
   Toolbar,
-  Menu,
-  MenuItem,
   Alert,
-  CircularProgress
+  CircularProgress,
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -38,8 +36,9 @@ const SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { companyId } = useParams();
-  const { servers, companyInfo, isAuthenticated , deleteServerStatus} = useSelector((state) => state.main);
-  const [timer,setTimer] = useState(false);
+  const { servers, companyInfo, isAuthenticated, deleteServerStatus } = useSelector((state) => state.main);
+  
+  const [timer, setTimer] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editedCompanyInfo, setEditedCompanyInfo] = useState({
     _id: '',
@@ -52,13 +51,15 @@ const SettingsPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // New loading state
 
-
-  if(deleteServerStatus == 'succeeded'){
-      setTimer(true)
-      setTimeout(()=>{
-        setTimer(false)
-      },3000)
-  }
+  useEffect(() => {
+    if (deleteServerStatus === 'succeeded') {
+      setTimer(true);
+      const timerId = setTimeout(() => {
+        setTimer(false);
+      }, 3000);
+      return () => clearTimeout(timerId); // Cleanup timeout on unmount
+    }
+  }, [deleteServerStatus]);
 
   useEffect(() => {
     const newSocket = io('https://queue-model-server.onrender.com', {
@@ -133,8 +134,12 @@ const SettingsPage = () => {
       ...editedCompanyInfo,
       _id: editedCompanyInfo._id, // Ensure _id is explicitly included
     };
-    await dispatch(updateCompanyInfo(payload));
-    setIsEditing(false);
+    try {
+      await dispatch(updateCompanyInfo(payload));
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating company info:', error);
+    }
   };
 
   // Handle logout
@@ -161,32 +166,33 @@ const SettingsPage = () => {
         <ListItem button onClick={handleLogout}>
           <ListItemText primary="Logout" />
         </ListItem>
+        <ListItem button>
+          <ListItemText primary="Customers Being Served" />
+        </ListItem>
       </List>
     </Box>
   );
 
   return (
     <div className="app-container">
-      <AppBar position="static" sx={{ width: '100%',  }}>
-      <Toolbar>
-        <IconButton
-          edge="start"
-          color="inherit"
-          aria-label="menu"
-          onClick={toggleDrawer(true)}
-          sx={{ display:'flex',justifyContent:'space-between'
-          }}
-        >
-          <MenuIcon />
-        </IconButton>
-      </Toolbar>
-    </AppBar>
+      <AppBar position="static" sx={{ width: '100%' }}>
+        <Toolbar>
+          <IconButton
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            onClick={toggleDrawer(true)}
+            sx={{ display: 'flex', justifyContent: 'space-between' }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
       <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
         {drawer}
       </Drawer>
 
       <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
-        {/* Company Info, Servers, and Other Content */}
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
@@ -200,11 +206,6 @@ const SettingsPage = () => {
               >
                 Add Server
               </Button>
-              {isLoading && (
-                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
-                  <CircularProgress />
-                </Box>
-              )}
               <List>
                 {servers.map((server) => (
                   <ListItem
@@ -231,13 +232,19 @@ const SettingsPage = () => {
                   </ListItem>
                 ))}
               </List>
+              
+              {isLoading && (
+                <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
+                  <CircularProgress />
+                </Box>
+              )}
 
-              {deleteServerStatus === 'succeeded' && (
+              {timer && (
                 <Box mt={4}>
                   <Alert severity="success">Deletion was successful</Alert>
                 </Box>
               )}
-              </Card>
+            </Card>
           </Grid>
 
           {/* Company Information */}
@@ -278,35 +285,25 @@ const SettingsPage = () => {
                     fullWidth
                     sx={{ mb: 2 }}
                   />
-                 <Grid container spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="center">
-                 <Grid item>
-                   <Button variant="contained" onClick={handleSave} sx={{ margin: 0 }}>
-                     Save
-                   </Button>
-                 </Grid>
-                 <Grid item>
-                   <Button variant="outlined" onClick={handleEditToggle} sx={{ margin: 0 }}>
-                     Cancel
-                   </Button>
-                 </Grid>
-               </Grid>
+                  <Grid container spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="center">
+                    <Grid item>
+                      <Button variant="contained" onClick={handleSave}>
+                        Save
+                      </Button>
+                    </Grid>
+                    <Grid item>
+                      <Button variant="outlined" onClick={handleEditToggle}>
+                        Cancel
+                      </Button>
+                    </Grid>
+                  </Grid>
                 </>
               ) : (
                 <>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    <strong>Name:</strong> {companyInfo.name}
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    <strong>Address:</strong> {companyInfo.address}
-                  </Typography>
-                  <Typography variant="body1" sx={{ mt: 2 }}>
-                    <strong>Phone:</strong> {companyInfo.phone}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    onClick={handleEditToggle}
-                    sx={{ mt: 2 }}
-                  >
+                  <Typography variant="h6">Name: {companyInfo.name}</Typography>
+                  <Typography variant="h6">Address: {companyInfo.address}</Typography>
+                  <Typography variant="h6">Phone: {companyInfo.phone}</Typography>
+                  <Button variant="contained" onClick={handleEditToggle} sx={{ mt: 2 }}>
                     Edit
                   </Button>
                 </>

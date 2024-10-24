@@ -38,7 +38,7 @@ const App = () => {
                 element={
                   <PrivateRoute>
                     <SettingsPage />
-                  </PrivateRoute>
+                </PrivateRoute>
                 }
               />
 
