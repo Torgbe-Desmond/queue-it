@@ -139,12 +139,6 @@ const SettingsPage = () => {
       onKeyDown={toggleDrawer(false)}
     >
       <List>
-        <ListItem button onClick={() => navigate('/dashboard')}>
-          <ListItemText primary="Dashboard" />
-        </ListItem>
-        <ListItem button onClick={() => navigate('/settings')}>
-          <ListItemText primary="Settings" />
-        </ListItem>
         <ListItem button onClick={handleLogout}>
           <ListItemText primary="Logout" />
         </ListItem>
@@ -254,12 +248,18 @@ const SettingsPage = () => {
                     fullWidth
                     sx={{ mb: 2 }}
                   />
-                  <Button variant="contained" onClick={handleSave} sx={{ mb: 2 }}>
-                    Save
-                  </Button>
-                  <Button variant="outlined" onClick={handleEditToggle}>
-                    Cancel
-                  </Button>
+                 <Grid container spacing={2} direction={{ xs: 'column', sm: 'row' }} justifyContent="center">
+                 <Grid item>
+                   <Button variant="contained" onClick={handleSave} sx={{ margin: 0 }}>
+                     Save
+                   </Button>
+                 </Grid>
+                 <Grid item>
+                   <Button variant="outlined" onClick={handleEditToggle} sx={{ margin: 0 }}>
+                     Cancel
+                   </Button>
+                 </Grid>
+               </Grid>
                 </>
               ) : (
                 <>

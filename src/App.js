@@ -36,18 +36,18 @@ const App = () => {
              <Route
                 path="/settings/:companyId"
                 element={
-                  // <PrivateRoute>
+                  <PrivateRoute>
                     <SettingsPage />
-                  // </PrivateRoute>
+                  </PrivateRoute>
                 }
               />
 
           {/* User pages with bottom navigation (Profile, Scan, History) */}
-          <Route element={<UserLayout />}>
+          {/* <Route element={<UserLayout />}>
             <Route path="/profile" element={<Profile />} />
             <Route path="/scan" element={<Scan />} />
             <Route path="/history" element={<History />} />
-          </Route>
+          </Route> */}
         </Routes>
       </Container>
     </Router>

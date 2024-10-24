@@ -87,7 +87,6 @@ const settingsSlice = createSlice({
       })
       .addCase(fetchServers.fulfilled, (state, action) => {
         state.status = 'succeeded';
-        console.log(action.payload)
         state.servers = action.payload;
       })
       .addCase(fetchServers.rejected, (state, action) => {
@@ -102,7 +101,8 @@ const settingsSlice = createSlice({
 
       // Delete Server
       .addCase(deleteServer.fulfilled, (state, action) => {
-        state.servers = state.servers.filter((server) => server._id !== action.payload);
+        const {serverId} = action.payload
+        state.servers = state.servers.filter((server) => server._id !== serverId);
       })
 
       // Fetch Company Info

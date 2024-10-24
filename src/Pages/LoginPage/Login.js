@@ -75,7 +75,7 @@ const Login = () => {
             onClick={() => navigate('/')} 
             style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
           >
-            Go Back
+            Go Home
           </p>
         </Box>
       </Container>

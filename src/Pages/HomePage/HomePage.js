@@ -101,7 +101,7 @@ const HomePage = () => {
               <TextField 
                 value={qrCode} 
                 onChange={(e) => setQrCode(e.target.value)} 
-                label="QR Code" 
+                label="QR Secret Code" 
                 variant="outlined" 
                 sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
               />
