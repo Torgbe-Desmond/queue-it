@@ -34,7 +34,7 @@ import {
   updateCompanyInfo,
 } from '../../features/settingsSlice'; // Adjust the import path as necessary
 
-const SettingsPage = () => {
+const   SettingsPage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { companyId } = useParams();
@@ -126,7 +126,7 @@ const SettingsPage = () => {
   };
 
   const fetchCompanyInfoData = async () => {
-    await dispatch(fetchCompanyInfo(companyId)); // Fetch company info using Redux
+     dispatch(fetchCompanyInfo(companyId)); // Fetch company info using Redux
   };
 
   useEffect(() => {
@@ -156,9 +156,7 @@ const SettingsPage = () => {
   };
 
   // Handle logout
-  const handleLogout = () => {
-    navigate('/login'); // Redirect to the login page
-  };
+
 
   // Drawer Toggle
   const toggleDrawer = (open) => (event) => {
@@ -168,44 +166,9 @@ const SettingsPage = () => {
     setDrawerOpen(open);
   };
 
-  const drawer = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={toggleDrawer(false)}
-      onKeyDown={toggleDrawer(false)}
-    >
-      <List>
-        <ListItem button onClick={handleLogout}>
-          <ListItemText primary="Logout" />
-        </ListItem>
-        <ListItem button>
-          <ListItemText primary="Customers Being Served" />
-        </ListItem>
-      </List>
-    </Box>
-  );
 
   return (
     <div className="app-container">
-      
-      <AppBar position="static" sx={{ width: '100%' }}>
-        <Toolbar>
-          <IconButton
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            onClick={toggleDrawer(true)}
-            sx={{ display: 'flex', justifyContent: 'space-between' }}
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Drawer anchor="left" open={drawerOpen} onClose={toggleDrawer(false)}>
-        {drawer}
-      </Drawer>
-
       <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
         <Grid container spacing={2}>
           {/* Server Management */}
@@ -233,8 +196,6 @@ const SettingsPage = () => {
                 <DeleteIcon />
               </IconButton>
             }
-            onClick={() => handleCopyToClipboard(server.serverNumber)} // Copy on click
-            sx={{ cursor: 'pointer' }} // Change cursor to indicate clickable item
           >
             <ListItemIcon>
               <CircleNotifications
@@ -244,7 +205,11 @@ const SettingsPage = () => {
                 }}
               />
             </ListItemIcon>
-            <ListItemText primary={`Server Id: ${server.serverNumber}`} />
+            <ListItemText 
+             onClick={() => handleCopyToClipboard(server.serverNumber)} // Copy on click
+             sx={{ cursor: 'pointer' }}
+            primary={`Server Id: ${server.serverNumber}`} 
+            />
           </ListItem>
         ))}
       </List>
@@ -261,7 +226,6 @@ const SettingsPage = () => {
         </Box>
       )}
 
-      {/* Snackbar for Copy Notification */}
       <Snackbar
         open={snackbarOpen}
         autoHideDuration={3000}
