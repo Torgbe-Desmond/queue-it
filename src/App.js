@@ -15,6 +15,7 @@ import SettingsPageLayout from './Layouts/SettingsPageLayout';
 import SettingsPage from './Pages/SettingsPage/SettingsPage';
 import QrCodePage from './Pages/QrCodePage/QrCodePage';
 import QueueModel from './Pages/QueueModel/QueueModel';
+import Card from './components/Card'
 
 const App = () => {
   return (
@@ -28,7 +29,7 @@ const App = () => {
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<HomePage />} />
               <Route path="/qr-scan/:serverId" element={< QrCodePage/>} />
-              <Route path="/server/:serverId" element={< QueueModel/>} />
+              <Route path="/server/:serverId" element={< Card/>} />
 
 
 
