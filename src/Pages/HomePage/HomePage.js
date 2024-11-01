@@ -33,7 +33,7 @@ const HomePage = () => {
     dispatch(loginServer(serverCode)).then((action) => {
       if (loginServer.fulfilled.match(action)) {
         const { _id } = action.payload;
-        navigate(`/customer/${_id}`);
+        navigate(`/server/${_id}`);
       }
     });
   };

@@ -13,6 +13,8 @@ import { Provider } from 'react-redux';
 import './App.css';
 import SettingsPageLayout from './Layouts/SettingsPageLayout';
 import SettingsPage from './Pages/SettingsPage/SettingsPage';
+import QrCodePage from './Pages/QrCodePage/QrCodePage';
+import QueueModel from './Pages/QueueModel/QueueModel';
 
 const App = () => {
   return (
@@ -25,14 +27,20 @@ const App = () => {
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/" element={<HomePage />} />
+              <Route path="/qr-scan/:serverId" element={< QrCodePage/>} />
+              <Route path="/server/:serverId" element={< QueueModel/>} />
+
+
+
+
 
               {/* Settings Page with nested routes */}
               <Route
                 path="/settings/:companyId/*"
                 element={
-                  <PrivateRoute>
+                  // <PrivateRoute>
                     <SettingsPageLayout />
-                  </PrivateRoute>
+                  // </PrivateRoute>
                 }
               >
                 {/* Default route to display SettingsPage */}
