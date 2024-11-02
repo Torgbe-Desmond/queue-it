@@ -28,6 +28,7 @@ const SettingsPageLayout = () => {
   
 
   const handleLogout = () => {
+    localStorage.removeItem('token')
     navigate('/login'); // Redirect to the login page
   };
 
