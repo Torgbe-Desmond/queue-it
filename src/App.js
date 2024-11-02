@@ -39,9 +39,9 @@ const App = () => {
               <Route
                 path="/settings/:companyId/*"
                 element={
-                  // <PrivateRoute>
+                  <PrivateRoute>
                     <SettingsPageLayout />
-                  // </PrivateRoute>
+                  </PrivateRoute>
                 }
               >
                 {/* Default route to display SettingsPage */}
