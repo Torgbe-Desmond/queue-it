@@ -8,11 +8,14 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import SettingsIcon from '@mui/icons-material/Settings';
 import DashboardIcon from '@mui/icons-material/Dashboard';
 import GroupsIcon from '@mui/icons-material/Groups';
+import { logout } from '../features/authSlice';
+import { useDispatch } from 'react-redux';
 
 const SettingsPageLayout = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [updatedWidth,setUpdatedWidth] = useState(null)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { companyId } = useParams()
 
   const toggleDrawer = (open) => (event) => {
@@ -28,8 +31,7 @@ const SettingsPageLayout = () => {
   
 
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    navigate('/login'); // Redirect to the login page
+    dispatch(logout())
   };
 
   const handleNavigateProfile = ()=>{
