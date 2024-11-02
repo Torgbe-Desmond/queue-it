@@ -53,12 +53,18 @@ const   SettingsPage = () => {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // New loading state
   const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState({}); // Track deletion status for each server
+  const [successMessage,setSuccessMessage] = useState(null);
+
 
   useEffect(() => {
     if (deleteServerStatus === 'succeeded') {
+      setSnackbarOpen(true); // Show snackbar after successful copy
+      setSuccessMessage('Deletion was successful')
       setTimer(true);
       const timerId = setTimeout(() => {
         setTimer(false);
+        setSnackbarOpen(false); // Show snackbar after successful copy
       }, 3000);
       return () => clearTimeout(timerId); // Cleanup timeout on unmount
     }
@@ -89,6 +95,7 @@ const   SettingsPage = () => {
   }, [companyId, servers]);
 
   const handleCopyToClipboard = (serverId) => {
+    setSuccessMessage('Server ID copied to clipboard!')
     navigator.clipboard.writeText(serverId).then(() => {
       setSnackbarOpen(true); // Show snackbar after successful copy
     });
@@ -114,7 +121,12 @@ const   SettingsPage = () => {
   };
 
   const removeServer = async (serverId) => {
-    dispatch(deleteServer(serverId)); // Dispatch action to delete server
+    setIsDeleting((prev) => ({ ...prev, [serverId]: true })); // Set loading for this server
+    try {
+      await dispatch(deleteServer(serverId));
+    } finally {
+      setIsDeleting((prev) => ({ ...prev, [serverId]: false })); // Remove loading after deletion
+    }
   };
 
   const handleEditToggle = () => {
@@ -142,6 +154,8 @@ const   SettingsPage = () => {
     }));
   };
 
+  
+
   const handleSave = async () => {
     const payload = {
       ...editedCompanyInfo,
@@ -158,7 +172,7 @@ const   SettingsPage = () => {
   // Handle logout
   return (
     <div className="app-container">
-      <Box sx={{ marginTop:10, width: '100%', }}>
+      <Box sx={{ marginTop:10, width: '100%', height:'100vh' }}>
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
@@ -173,45 +187,41 @@ const   SettingsPage = () => {
         Add Server
       </Button>
       <List>
-        {servers.map((server) => (
-          <ListItem
-            key={server._id} // Use server ID as the key
-            secondaryAction={
-              <IconButton
-                edge="end"
-                aria-label="delete"
-                onClick={() => removeServer(server._id)} // Pass server ID
-              >
-                <DeleteIcon />
-              </IconButton>
-            }
-          >
-            <ListItemIcon>
-              <CircleNotifications
-                sx={{
-                  color: matchedServers.includes(server._id) ? 'green' : 'red',
-                  fontSize: '16px',
-                }}
-              />
-            </ListItemIcon>
-            <ListItemText 
-             onClick={() => handleCopyToClipboard(server.serverNumber)} // Copy on click
-             sx={{ cursor: 'pointer' }}
-            primary={`Server Id: ${server.serverNumber}`} 
-            />
-          </ListItem>
-        ))}
+      {servers.map((server) => (
+      <ListItem key={server._id} secondaryAction={
+        <IconButton
+          edge="end"
+          aria-label="delete"
+          onClick={() => removeServer(server._id)}
+          disabled={isDeleting[server._id]} // Disable button if loading
+        >
+          {isDeleting[server._id] ? (
+            <CircularProgress size={24} />
+          ) : (
+            <DeleteIcon />
+          )}
+        </IconButton>
+      }>
+        <ListItemIcon>
+          <CircleNotifications
+            sx={{
+              color: matchedServers.includes(server._id) ? 'green' : 'red',
+              fontSize: '16px',
+            }}
+          />
+        </ListItemIcon>
+        <ListItemText
+          onClick={() => handleCopyToClipboard(server.serverNumber)}
+          sx={{ cursor: 'pointer' }}
+          primary={`Server Id: ${server.serverNumber}`}
+        />
+      </ListItem>
+    ))}
       </List>
 
       {isLoading && (
         <Box sx={{ display: 'flex', justifyContent: 'center', marginTop: 2 }}>
           <CircularProgress />
-        </Box>
-      )}
-
-      {timer && (
-        <Box mt={4}>
-          <Alert severity="success">Deletion was successful</Alert>
         </Box>
       )}
 
@@ -221,7 +231,7 @@ const   SettingsPage = () => {
         onClose={handleSnackbarClose}
       >
         <Alert onClose={handleSnackbarClose} severity="success">
-          Server ID copied to clipboard!
+          {successMessage}
         </Alert>
       </Snackbar>
     </Card>

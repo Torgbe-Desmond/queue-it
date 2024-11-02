@@ -80,12 +80,9 @@ const SettingsPageLayout = () => {
       {/* Full-width AppBar */}
       <AppBar  color="primary" sx={{ width: '100vw', mb: 4 }}>
           <Toolbar>
-            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)} sx={{ mr: 2 }}>
+            <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)} sx={{ marginLeft: 2 }}>
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Settings
-            </Typography>
             <IconButton color="inherit">
               {/* <SettingsIcon /> */}
             </IconButton>
