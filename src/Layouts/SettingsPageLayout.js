@@ -32,6 +32,7 @@ const SettingsPageLayout = () => {
 
   const handleLogout = () => {
     dispatch(logout())
+    navigate(`/login`)
   };
 
   const handleNavigateProfile = ()=>{

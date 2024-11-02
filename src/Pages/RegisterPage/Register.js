@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Box, Avatar, CircularProgress, IconButton } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../features/authSlice';
+import { clearError, register } from '../../features/authSlice';
 import avatarImage from '../../assests/android-icon-192x192.png';
 
 const Register = () => {
@@ -10,7 +10,7 @@ const Register = () => {
     email: '',
     password: '',
   });
-  const [validationError, setValidationError] = useState(''); // Validation error state
+  const [errorHandler, setErrorHandler] = useState(''); // Validation and error state
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
@@ -20,20 +20,20 @@ const Register = () => {
       ...companyDetails,
       [e.target.name]: e.target.value,
     });
-    setValidationError(''); // Clear validation error on input change
+    setErrorHandler(''); // Clear validation error on input change
   };
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    // Check if email or password is empty
-    if (!companyDetails.email || !companyDetails.password) {
-      setValidationError('Please fill in both email and password.');
-      return;
+  // API error handling
+  useEffect(() => {
+    if (error) {
+      setErrorHandler(error);
+      const errorTimeout = setTimeout(() => {
+        setErrorHandler(null);
+        dispatch(clearError());
+      }, 3000);
+      return () => clearTimeout(errorTimeout); // Cleanup on unmount
     }
-
-    dispatch(register(companyDetails));
-  };
+  }, [error, dispatch]);
 
   // Redirect after successful registration
   useEffect(() => {
@@ -41,6 +41,27 @@ const Register = () => {
       navigate(`/settings/${user.id}`);
     }
   }, [isAuthenticated, user, navigate]);
+
+  const handleNavigate = () => {
+    setCompanyDetails({
+      email: '',
+      password: '',
+    });
+    navigate('/');
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    // Check if email or password is empty
+    if (!companyDetails.email || !companyDetails.password) {
+      setErrorHandler('Please fill in both email and password.');
+      setTimeout(() => setErrorHandler(null), 3000);
+      return;
+    }
+
+    dispatch(register(companyDetails));
+  };
 
   return (
     <div className="register-container">
@@ -77,12 +98,15 @@ const Register = () => {
               value={companyDetails.password}
               onChange={handleChange}
             />
-
-            {/* Display validation error */}
-            {validationError && <p style={{ color: 'red' }}>{validationError}</p>} 
             
-            {/* Display API error message */}
-            {error && <p style={{ color: 'red' }}>{error}</p>} 
+            {/* Display error message */}
+            {errorHandler && (
+              <Box mt={4}>
+                <Alert severity="error" sx={{ mb: 2 }}>
+                  {errorHandler}
+                </Alert>
+              </Box>
+            )}
 
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
               {loading ? <CircularProgress size={24} /> : 'Register'}
@@ -91,7 +115,7 @@ const Register = () => {
 
           {/* Go Home Text */}
           <p
-            onClick={() => navigate('/')}
+            onClick={handleNavigate}
             style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
           >
             Go Home

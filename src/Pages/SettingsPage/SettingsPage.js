@@ -156,20 +156,9 @@ const   SettingsPage = () => {
   };
 
   // Handle logout
-
-
-  // Drawer Toggle
-  const toggleDrawer = (open) => (event) => {
-    if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-      return;
-    }
-    setDrawerOpen(open);
-  };
-
-
   return (
     <div className="app-container">
-      <Box sx={{ padding: 4, width: '100%', margin: '0 auto' }}>
+      <Box sx={{ marginTop:10, width: '100%', }}>
         <Grid container spacing={2}>
           {/* Server Management */}
           <Grid item xs={12} md={6}>
@@ -291,9 +280,11 @@ const   SettingsPage = () => {
                 </>
               ) : (
                 <>
-                  <Typography variant="h6">Name: {companyInfo.name}</Typography>
-                  <Typography variant="h6">Address: {companyInfo.address}</Typography>
-                  <Typography variant="h6">Phone: {companyInfo.phone}</Typography>
+                  <Box sx={{display:'flex',justifyContent:'center',alignItems:'flex-start',flexDirection:'column'}}>
+                      <Typography variant="">Name: {companyInfo.name}</Typography>
+                      <Typography variant="">Address: {companyInfo.address}</Typography>
+                      <Typography variant="">Phone: {companyInfo.phone}</Typography>
+                  </Box>
                   <Button variant="contained" onClick={handleEditToggle} sx={{ mt: 2 }}>
                     Edit
                   </Button>

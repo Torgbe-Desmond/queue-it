@@ -126,7 +126,7 @@ const CardItem = () => {
 
           <Box sx={{ marginTop: 3, textAlign: 'center' }}>
             {isOnline ? (
-              <Button sx={{margin:2}} variant="outlined" color="secondary" onClick={handleDisconnect}>
+              <Button sx={{width:'50%'}} variant="outlined" color="secondary" onClick={handleDisconnect}>
                 Disconnect
               </Button>
             ) : (

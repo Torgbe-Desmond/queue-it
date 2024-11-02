@@ -45,6 +45,12 @@ const authSlice = createSlice({
         state.user = null;
         localStorage.removeItem('token')
       },
+      clearError:(state)=>{
+        state.error=null;
+      },
+      clearIsAuthenticated: (state)=>{
+        state.isAuthenticated = false;
+      }
     },
     extraReducers: (builder) => {
       builder
@@ -61,7 +67,7 @@ const authSlice = createSlice({
         })
         .addCase(login.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.payload;  // Save the error message
+          state.error = action.payload.message;  // Save the error message
         })
         .addCase(register.pending, (state) => {
           state.loading = true;
@@ -74,11 +80,11 @@ const authSlice = createSlice({
         })
         .addCase(register.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.payload;  // Save the error message
+          state.error = action.payload.message;  // Save the error message
         });
     },
   });
   
-  export const { logout } = authSlice.actions;
+  export const { logout,clearError,clearIsAuthenticated } = authSlice.actions;
   
   export default authSlice.reducer;

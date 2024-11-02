@@ -122,17 +122,17 @@ const HomePage = () => {
         <div className='btn-container'>
         <Button
           variant="contained"
-          onClick={() => navigate('/register')}
-          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
-        >
-          Register A Company
-        </Button>
-        <Button
-          variant="contained"
           onClick={() => navigate('/login')}
           sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
         >
           Login Account
+        </Button>
+        <Button
+          variant="contained"
+          onClick={() => navigate('/register')}
+          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
+        >
+          Register A Company
         </Button>
         </div>
       </Box>
