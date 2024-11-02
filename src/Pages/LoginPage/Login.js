@@ -9,6 +9,7 @@ const Login = () => {
     email: '',
     password: '',
   });
+  const [validationError, setValidationError] = useState(''); // Add validation error state
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth); 
@@ -18,16 +19,27 @@ const Login = () => {
       ...companyDetails,
       [e.target.name]: e.target.value,
     });
+    setValidationError(''); // Clear validation error on input change
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // Check if email or password is empty
+    if (!companyDetails.email || !companyDetails.password) {
+      setValidationError('Please fill in both email and password.');
+      return;
+    }
+
     dispatch(login(companyDetails));
   };
 
-  if (isAuthenticated) {
-    navigate(`/settings/${user?.id}`);
-  }
+  // Redirect after successful registration
+  useEffect(() => {
+    if (isAuthenticated && user?.id) {
+      navigate(`/settings/${user.id}`);
+    }
+  }, [isAuthenticated, user, navigate]);
 
   return (
     <div className="login-container">
@@ -38,7 +50,7 @@ const Login = () => {
           <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
             <Avatar
               alt="Customer Avatar"
-              src={require('../../assests/android-icon-192x192.png')} // Placeholder image URL, replace with actual image
+              src={require('../../assests/android-icon-192x192.png')} 
               sx={{ width: 120, height: 120 }}
             />
           </Box>
@@ -64,7 +76,13 @@ const Login = () => {
               value={companyDetails.password}
               onChange={handleChange}
             />
+            
+            {/* Display validation error */}
+            {validationError && <p style={{ color: 'red' }}>{validationError}</p>} 
+            
+            {/* Display API error message */}
             {error && <p style={{ color: 'red' }}>{error}</p>} 
+            
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
               {loading ? <CircularProgress size={24} /> : 'Login'} 
             </Button>
