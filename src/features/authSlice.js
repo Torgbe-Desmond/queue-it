@@ -38,7 +38,7 @@ const authSlice = createSlice({
       user: null,
       loading: false,
       error: null,
-
+      message:''
     },
     reducers: {
       logout: (state) => {
@@ -76,11 +76,11 @@ const authSlice = createSlice({
         .addCase(register.fulfilled, (state, action) => {
           state.isAuthenticated = true;
           state.loading = false;
-          state.user = action.payload;  // Save the logged-in user data
+          state.message = action.payload.message;  // Save the logged-in user data
         })
         .addCase(register.rejected, (state, action) => {
           state.loading = false;
-          state.error = action.payload.message;  // Save the error message
+          state.message = action.payload.message;  // Save the logged-in user data
         });
     },
   });

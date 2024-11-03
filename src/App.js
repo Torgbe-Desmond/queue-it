@@ -6,7 +6,6 @@ import Login from './Pages/LoginPage/Login';
 import Register from './Pages/RegisterPage/Register';
 import HomePage from './Pages/HomePage/HomePage';
 import Profile from './components/Profile';
-import History from './components/History';
 import PrivateRoute from './components/PrivateRoute';
 import store from './features/store';
 import { Provider } from 'react-redux';
@@ -16,6 +15,8 @@ import SettingsPage from './Pages/SettingsPage/SettingsPage';
 import QrCodePage from './Pages/QrCodePage/QrCodePage';
 import QueueModel from './Pages/QueueModel/QueueModel';
 import Card from './components/Card'
+import ServersPage from './Pages/ServersPage/ServersPage';
+import DashboardPage from './components/DashboardPage';
 
 const App = () => {
   return (
@@ -48,8 +49,9 @@ const App = () => {
                 <Route index element={<SettingsPage />} />  
 
                 {/* Additional nested routes */}
-                <Route path="profile" element={<Profile />} />
-                <Route path="history" element={<History />} />
+                {/* <Route path="profile" element={<Profile />} /> */}
+                {/* <Route path="history" element={<DashboardPage />} /> */}
+                {/* <Route path="channels" element={<ServersPage />} /> */}
               </Route>
             </Routes>
           </Container>

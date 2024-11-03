@@ -15,6 +15,7 @@ export const getServerDetails = createAsyncThunk(
   }
 );
 
+
 const cardSlice = createSlice({
   name: 'card',
   initialState: {

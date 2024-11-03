@@ -36,11 +36,15 @@ const SettingsPageLayout = () => {
   };
 
   const handleNavigateProfile = ()=>{
-    navigate(`/settings/${companyId}/profile`)
+    navigate(`/settings/${companyId}/history`)
   }
 
   const handleNavigateSettings = ()=>{
     navigate(`/settings/${companyId}`)
+  }
+
+  const navigateChannels = ()=>{
+    navigate(`/settings/${companyId}/channels`)
   }
 
   const drawerContent = (
@@ -55,21 +59,25 @@ const SettingsPageLayout = () => {
       </Typography>
       <Divider />
       <List>
-        <ListItem button onClick={handleNavigateSettings}>
+        <ListItem button sx={{cursor:'pointer'}} onClick={handleNavigateSettings}>
           <ListItemIcon><DashboardIcon /></ListItemIcon>
           <ListItemText primary="Dashboard" />
         </ListItem>
-        <ListItem button>
+        {/* <ListItem button>
           <ListItemIcon><LockIcon /></ListItemIcon>
           <ListItemText primary="Privacy" />
-        </ListItem>
-        <ListItem button>
+        </ListItem> */}
+        {/* <ListItem button onClick={navigateChannels}>
           <ListItemIcon><GroupsIcon /></ListItemIcon>
-          <ListItemText primary="Servers" />
-        </ListItem>
+          <ListItemText primary="Channels" />
+        </ListItem> */}
+        {/* <ListItem button onClick={handleNavigateProfile}>
+          <ListItemIcon><GroupsIcon /></ListItemIcon>
+          <ListItemText primary="Dashbaord-2" />
+        </ListItem> */}
       </List>
       <Divider sx={{ mt: 'auto' }} />
-      <ListItem button sx={{ mt: 2 }} onClick={handleLogout}>
+      <ListItem button sx={{ mt: 2, cursor:'pointer' }} onClick={handleLogout}>
         <ListItemIcon><ExitToAppIcon /></ListItemIcon>
         <ListItemText primary="Logout" />
       </ListItem>
@@ -78,7 +86,7 @@ const SettingsPageLayout = () => {
   return (
     <>
       {/* Full-width AppBar */}
-      <AppBar  color="primary" sx={{ width: '100vw', mb: 4 }}>
+      <AppBar  color="primary" sx={{ width: '100vw', mb: 10 }}> 
           <Toolbar>
             <IconButton edge="start" color="inherit" aria-label="menu" onClick={toggleDrawer(true)} sx={{ marginLeft: 2 }}>
               <MenuIcon />

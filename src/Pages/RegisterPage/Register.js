@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { TextField, Button, Container, Box, Avatar, CircularProgress, Alert } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress, Alert, Snackbar } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { clearError, register } from '../../features/authSlice';
@@ -10,32 +10,35 @@ const Register = () => {
     email: '',
     password: '',
   });
-  const [errorHandler, setErrorHandler] = useState(''); // Validation and error state
+  const [errorHandler, setErrorHandler] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarSeverity, setSnackbarSeverity] = useState('error');
+  const { loading, error, isAuthenticated, user, message } = useSelector((state) => state.auth);
 
   const handleChange = (e) => {
     setCompanyDetails({
       ...companyDetails,
       [e.target.name]: e.target.value,
     });
-    setErrorHandler(''); // Clear validation error on input change
+    setErrorHandler('');
   };
 
-  // API error handling
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   useEffect(() => {
     if (error) {
-      setErrorHandler(error);
-      const errorTimeout = setTimeout(() => {
-        setErrorHandler(null);
-        dispatch(clearError());
-      }, 3000);
-      return () => clearTimeout(errorTimeout); // Cleanup on unmount
+      setSnackbarMessage(error);
+      setSnackbarSeverity('error');
+      setSnackbarOpen(true);
+      dispatch(clearError());
     }
   }, [error, dispatch]);
 
-  // Redirect after successful registration
   useEffect(() => {
     if (isAuthenticated && user?.id) {
       navigate(`/settings/${user.id}`);
@@ -53,21 +56,30 @@ const Register = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    // Check if email or password is empty
     if (!companyDetails.email || !companyDetails.password) {
       setErrorHandler('Please fill in both email and password.');
       setTimeout(() => setErrorHandler(null), 3000);
       return;
     }
 
-    dispatch(register(companyDetails));
+    dispatch(register(companyDetails)).then((action) => {
+      if (register.fulfilled.match(action)) {
+        setSnackbarMessage(message || 'Registration successful!');
+        setSnackbarSeverity('success');
+        setSnackbarOpen(true);
+        navigate('/login');
+      } else if (register.rejected.match(action)) {
+        setSnackbarMessage(message || 'Registration failed.');
+        setSnackbarSeverity('error');
+        setSnackbarOpen(true);
+      }
+    });
   };
 
   return (
     <div className="register-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-          {/* Clickable Avatar that navigates to homepage */}
           <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
             <Avatar
               alt="Customer Avatar"
@@ -76,7 +88,6 @@ const Register = () => {
             />
           </Box>
 
-          {/* Registration Form */}
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
@@ -87,6 +98,7 @@ const Register = () => {
               type="email"
               value={companyDetails.email}
               onChange={handleChange}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -97,9 +109,9 @@ const Register = () => {
               type="password"
               value={companyDetails.password}
               onChange={handleChange}
+              disabled={loading}
             />
-            
-            {/* Display error message */}
+
             {errorHandler && (
               <Box mt={4}>
                 <Alert severity="error" sx={{ mb: 2 }}>
@@ -113,13 +125,19 @@ const Register = () => {
             </Button>
           </Box>
 
-          {/* Go Home Text */}
-          <p
-            onClick={handleNavigate}
-            style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose}
           >
+            <Alert onClose={handleSnackbarClose} severity={snackbarSeverity}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
+          <Button variant="outlined" disabled={loading} onClick={handleNavigate} style={{ cursor: 'pointer', marginTop: '1rem' }}>
             Go Home
-          </p>
+          </Button>
         </Box>
       </Container>
     </div>

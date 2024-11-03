@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
-import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress } from '@mui/material';
+import { Box, Button, Typography, Accordion, AccordionSummary, AccordionDetails, TextField, CircularProgress, Snackbar, Alert } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCustomer, loginServer, scanQrCode } from '../../features/homeSlice'; // Adjust the import path as necessary
@@ -13,14 +13,29 @@ const HomePage = () => {
   const [qrCode, setQrCode] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
 
-  const { customerLoading, serverLoading, qrLoading,error } = useSelector((state) => state.home); // Select errors
+  const { customerLoading, serverLoading, qrLoading, error } = useSelector((state) => state.home);
 
   const handleAccordionChange = (accordion) => (event, isExpanded) => {
+    if(isExpanded === false){
+      setServerCode('')
+      setQrCode('')
+    }
     setExpandedAccordion(isExpanded ? accordion : false);
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   const handlePostCustomer = () => {
+    if (!customerCode) {
+      setSnackbarMessage('Customer code is required.');
+      setSnackbarOpen(true);
+      return;
+    }
     dispatch(fetchCustomer(customerCode)).then((action) => {
       if (fetchCustomer.fulfilled.match(action)) {
         const { _id } = action.payload;
@@ -30,23 +45,38 @@ const HomePage = () => {
   };
 
   const handlePostServer = () => {
+    if (!serverCode) {
+      setSnackbarMessage('Server code is required.');
+      setSnackbarOpen(true);
+      return;
+    }
     dispatch(loginServer(serverCode)).then((action) => {
       if (loginServer.fulfilled.match(action)) {
         const { _id } = action.payload;
         navigate(`/server/${_id}`);
+      } else if (loginServer.rejected.match(action)) {
+        setSnackbarMessage('Failed to log into server. Please check your code and try again.');
+        setSnackbarOpen(true);
       }
     });
   };
 
   const handlePostQrCode = () => {
+    if (!qrCode) {
+      setSnackbarMessage('QR code is required.');
+      setSnackbarOpen(true);
+      return;
+    }
     dispatch(scanQrCode(qrCode)).then((action) => {
       if (scanQrCode.fulfilled.match(action)) {
         const { _id } = action.payload;
         navigate(`/qr-scan/${_id}`);
+      } else if (scanQrCode.rejected.match(action)) {
+        setSnackbarMessage('Failed to scan QR code. Please try again.');
+        setSnackbarOpen(true);
       }
     });
   };
-
   return (
     <div className='home-container'>
       <Box sx={{ textAlign: 'center', mt: 4, px: { xs: 2, md: 4 } }}>
@@ -56,7 +86,6 @@ const HomePage = () => {
         <Typography variant="subtitle1" gutterBottom sx={{ color: '#7B8D93', fontSize: { xs: '0.9rem', md: '1.2rem' } }}>
           Choose any of the steps to start
         </Typography>
-
 
         {/* Server Accordion */}
         <Accordion expanded={expandedAccordion === 'serverAccordion'} onChange={handleAccordionChange('serverAccordion')} sx={{ mb: 2 }}>
@@ -68,14 +97,13 @@ const HomePage = () => {
               Here a server belonging to a company can join their particular company channels and start to serve customers.
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-              <TextField 
-                value={serverCode} 
-                onChange={(e) => setServerCode(e.target.value)} 
-                label="Server Secret Code" 
-                variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
+              <TextField
+                value={serverCode}
+                onChange={(e) => setServerCode(e.target.value)}
+                label="Server Secret Code"
+                variant="outlined"
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }}
               />
-              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show server error */}
               <Button
                 variant="contained"
                 onClick={handlePostServer}
@@ -98,14 +126,13 @@ const HomePage = () => {
               Here a customer can use their code to connect to the server by scanning the QR Code.
             </Typography>
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%' }}>
-              <TextField 
-                value={qrCode} 
-                onChange={(e) => setQrCode(e.target.value)} 
-                label="QR Secret Code" 
-                variant="outlined" 
-                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }} 
+              <TextField
+                value={qrCode}
+                onChange={(e) => setQrCode(e.target.value)}
+                label="QR Secret Code"
+                variant="outlined"
+                sx={{ width: { xs: '100%', sm: '80%', md: '30%' }, margin: 2 }}
               />
-              {error && <Typography color="error" variant="body2">{error}</Typography>} {/* Show QR error */}
               <Button
                 variant="contained"
                 onClick={handlePostQrCode}
@@ -118,22 +145,33 @@ const HomePage = () => {
           </AccordionDetails>
         </Accordion>
 
+        {/* Snackbar for error messages */}
+        <Snackbar
+          open={snackbarOpen}
+          autoHideDuration={3000}
+          onClose={handleSnackbarClose}
+        >
+          <Alert onClose={handleSnackbarClose} severity="error">
+            {snackbarMessage || error}
+          </Alert>
+        </Snackbar>
+
         {/* Register and Login Buttons */}
         <div className='btn-container'>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/login')}
-          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
-        >
-          Login Account
-        </Button>
-        <Button
-          variant="contained"
-          onClick={() => navigate('/register')}
-          sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
-        >
-          Register A Company
-        </Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate('/login')}
+            sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
+          >
+            Login Account
+          </Button>
+          <Button
+            variant="contained"
+            onClick={() => navigate('/register')}
+            sx={{ width: { xs: '100%', sm: '100%', md: '30%' }, marginTop: 2 }}
+          >
+            Register A Company
+          </Button>
         </div>
       </Box>
     </div>

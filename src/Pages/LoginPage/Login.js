@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { TextField, Button, Container, Box, Avatar, CircularProgress, Alert } from '@mui/material';
+import { TextField, Button, Container, Box, Avatar, CircularProgress, Alert, Snackbar } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { clearError, login } from '../../features/authSlice';
+import avatarImage from '../../assests/android-icon-192x192.png';
 
 const Login = () => {
   const [companyDetails, setCompanyDetails] = useState({
@@ -10,10 +11,11 @@ const Login = () => {
     password: '',
   });
   const [errorHandler, setErrorHandler] = useState(null);
-  const [successMessage, setSuccessMessage] = useState(null);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { loading, error, isAuthenticated, user } = useSelector((state) => state.auth);
+  const { loading, error, isAuthenticated, user, message } = useSelector((state) => state.auth);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
 
   const handleChange = (e) => {
     setCompanyDetails({
@@ -23,9 +25,15 @@ const Login = () => {
     setErrorHandler(''); // Clear validation error on input change
   };
 
+  const handleSnackbarClose = () => {
+    setSnackbarOpen(false);
+  };
+
   useEffect(() => {
     if (error) {
       setErrorHandler(error);
+      setSnackbarMessage(error);
+      setSnackbarOpen(true);
       const errorTimeout = setTimeout(() => {
         setErrorHandler(null);
         dispatch(clearError());
@@ -36,9 +44,9 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated && user?.id) {
-      setSuccessMessage('Login was successful');
+      setSnackbarMessage('Login was successful');
+      setSnackbarOpen(true);
       const successTimeout = setTimeout(() => {
-        setSuccessMessage(null);
         navigate(`/settings/${user.id}`);
       }, 3000);
       return () => clearTimeout(successTimeout); // Cleanup on unmount
@@ -59,9 +67,9 @@ const Login = () => {
     // Check if email or password is empty
     if (!companyDetails.email || !companyDetails.password) {
       setErrorHandler('Please fill in both email and password.');
-      setTimeout(() => {
-        setErrorHandler(null);
-      }, 3000);
+      setSnackbarMessage('Please fill in both email and password.');
+      setSnackbarOpen(true);
+      setTimeout(() => setErrorHandler(null), 3000);
       return;
     }
 
@@ -72,12 +80,11 @@ const Login = () => {
     <div className="login-container">
       <Container component="main" maxWidth="xs">
         <Box sx={{ mt: 8, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-
           {/* Clickable Avatar that navigates to homepage */}
           <Box onClick={() => navigate('/')} sx={{ cursor: 'pointer' }}>
             <Avatar
               alt="Customer Avatar"
-              src={require('../../assests/android-icon-192x192.png')}
+              src={avatarImage}
               sx={{ width: 120, height: 120 }}
             />
           </Box>
@@ -92,6 +99,7 @@ const Login = () => {
               type="email"
               value={companyDetails.email}
               onChange={handleChange}
+              disabled={loading}
             />
             <TextField
               margin="normal"
@@ -102,6 +110,7 @@ const Login = () => {
               type="password"
               value={companyDetails.password}
               onChange={handleChange}
+              disabled={loading}
             />
 
             {/* Display Validation/Error Message */}
@@ -113,24 +122,26 @@ const Login = () => {
               </Box>
             )}
 
-            {/* Display Success Message */}
-            {isAuthenticated && successMessage && (
-              <Box mt={4}>
-                <Alert severity="success" sx={{ mb: 2 }}>
-                  {successMessage}
-                </Alert>
-              </Box>
-            )}
-
             <Button type="submit" fullWidth variant="contained" sx={{ mt: 3, mb: 2 }} disabled={loading}>
               {loading ? <CircularProgress size={24} /> : 'Login'}
             </Button>
           </Box>
 
+          {/* Snackbar for Error or Success Messages */}
+          <Snackbar
+            open={snackbarOpen}
+            autoHideDuration={3000}
+            onClose={handleSnackbarClose}
+          >
+            <Alert onClose={handleSnackbarClose} severity={isAuthenticated ? "success" : "error"}>
+              {snackbarMessage}
+            </Alert>
+          </Snackbar>
+
           {/* Go Back Text */}
-          <p onClick={handleNavigate} style={{ cursor: 'pointer', color: 'blue', marginTop: '1rem' }}>
+          <Button variant="outlined" disabled={loading} onClick={handleNavigate} style={{ cursor: 'pointer', marginTop: '1rem' }}>
             Go Home
-          </p>
+          </Button>
         </Box>
       </Container>
     </div>

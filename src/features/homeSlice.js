@@ -58,6 +58,7 @@ const homeSlice = createSlice({
     serverLoading: false,
     qrLoading: false,
     error: null,
+
   },
   reducers: {},
   extraReducers: (builder) => {
